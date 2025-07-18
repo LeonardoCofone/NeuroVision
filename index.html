@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="style.css">  
+<title>NeuroVision: Neural Network Visualizer</title>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>NeuroVision: Neural Network Visualizer</h1>
+    
+    <p class="subtitle">Explore how neural networks learn, step by step. Created by Leonardo Cofone</p>
+  </header>
+
+  <div class="visualization-container">
+    <div class="intro-section">
+      <div class="video-container" aria-label="Segnaposto per la visualizzazione 3D di una rete neurale">
+      <img
+        src="images/imm.jpg"
+        alt="Visualizzazione 3D di una rete neurale con nodi interconnessi che mostrano schemi di attivazione"
+        class="video-placeholder"
+        draggable="false"
+      />
+      </div>
+      <div class="intro-text">
+        <h3>What is a Neural Network?</h3>
+        <p>A neural network is a computer system that learns from many labeled examples and tries to think a bit like a human brain. It's made up of many units called <strong>neurons</strong>, which are connected to each other in layers.</p>
+        <p>Each neuron receives some numbers, performs a small calculation, and passes the results (a number) to the next neurons. By working together, these neurons can recognize patterns, solve problems and make predictions. <i>Just like we learn from experience, a neural network makes a prediction, then checks how wrong it was and updates its connections accordingly to improve.</i> </p>
+        <h3 style="margin-top:2rem;">What can you do here?</h3>
+        <p>This website shows you exactly how a neural network learns, step by step! Below this introduction, you'll find a legend (make sure to read it carefully as it will help you understand everything better) and a brief explanation of what an activation is. Right after, ther's a small real neural network. You can observe how it trains in real-time and see how it improves at each step. Below the network, there's a panel explaining each training step plus a practical example showing how it works in the real world.</p>
+    </div>    
+
+    </div>
+
+    <div class="legend-panel">
+      <h4 id="legend-title">Legend</h4>
+      <ul id="legend-list">
+          <li>
+              <span class="legend-color-box weight"></span>
+              <span class="legend-text"><b>w (Weight)</b>: Controls how much one neuron influences the next one. It’s the strength between neurons.</span>
+          </li>
+          <li>
+              <span class="legend-color-box bias"></span>
+              <span class="legend-text"><b>b (Bias)</b>: A value added to help the neuron activate even with weak signal and connections.</span>
+          </li>
+          <li>
+              <span class="legend-color-box total-input"></span>
+              <span class="legend-text"><b>z (Total input)</b>: The sum of all inputs, including weights and bias: <code>z = wx + b</code>.</span>
+          </li>
+          <li>
+              <span class="legend-color-box activation-func"></span>
+              <span class="legend-text"><b>f (Activation function)</b>: The math inside a neuron that transforms the input into an output. Adds flexibility to the network.</span>
+          </li>
+          <li>
+              <span class="legend-color-box activation"></span>
+              <span class="legend-text"><b>a (Activation)</b>: The neuron’s output after its internal calculation and activation function.</span>
+          </li>
+          <li>
+              <span class="legend-color-box layer-index"></span>
+              <span class="legend-text"><b>L (Layer index)</b>: Position of the layer in the network. L = 0 is the input, L = 1 is the first hidden layer, etc.</span>
+          </li>
+          <li>
+              <span class="legend-color-box y-hat"></span>
+              <span class="legend-text"><b>ŷ (y-hat)</b>: The predicted output of the network. Compared to the true value to measure error.</span>
+          </li>
+          <li>
+              <span class="legend-color-box loss"></span>
+              <span class="legend-text"><b>J / ℒ (Loss function)</b>: Indicates how far the prediction is from the correct result. Lower is better.</span>
+          </li>
+          <li>
+              <span class="legend-color-box delta"></span>
+              <span class="legend-text"><b>𝛿 (Delta)</b>: The neuron’s error used to adjust weights during Backpropagation.</span>
+          </li>
+          <li>
+              <span class="legend-color-box gradient"></span>
+              <span class="legend-text"><b>∇ (Gradient)</b>: Tells how to change the weights to reduce error. Guides the learning direction.</span>
+          </li>
+          <li>
+              <span class="legend-color-box learning-rate"></span>
+              <span class="legend-text"><b>η (Learning rate)</b>: Controls how fast the network learns and how large each weight update is. Higher = faster, lower = safer.</span>
+          </li>
+          <li>
+              <span class="legend-color-box epoch"></span>
+              <span class="legend-text"><b>Epoch</b>: One full pass over the entire training dataset.</span>
+          </li>
+          <li>
+              <span class="legend-color-box batch"></span>
+              <span class="legend-text"><b>Batch / Mini-batch</b>: A small subset of training examples used in a single update step.</span>
+          </li>
+          <li>
+              <span class="legend-color-box forward-backprop"></span>
+              <span class="legend-text"><b>Forward Propagation</b>: The step where the network processes input data through the layers to produce an output <i>(tries to predict something new).</i></span>
+          </li>
+          <li>
+              <span class="legend-color-box forward-backprop"></span>
+              <span class="legend-text"><b>Backpropagation</b>: The step where the network calculates errors and adjusts weights to minimize the difference between prediction and true value <i>(learns from past mistakes).</i></span>
+          </li>
+      </ul>
+  </div>
+  
+  
+
+    <div class="activation-functions-box">
+      <h4>Activation Functions</h4>
+      <p>
+        As mentioned before, activation functions are like small rules each neuron uses to decide what number to send next.<br>
+        They help the network learn complex things by introducing non-linearity, making it smarter than just a straight line.
+      </p>
+      <ul>
+        <li><strong>Sigmoid</strong><br>Transforms any number to a value between 0 and 1. Good for binary (yes/no) decisions.</li>
+        <li><strong>ReLU (Rectified Linear Unit)</strong><br>Returns the number if positive, or zero if negative. Fast and popular.</li>
+        <li><strong>Step Function</strong><br>Returns 1 if the input is zero or more, otherwise 0. Very simple but not much used today.</li>
+        <li><strong>Tanh</strong><br>Like Sigmoid but ranges from -1 to +1. Sometimes helps learning faster.</li>
+        <li><strong>Leaky ReLU</strong><br>Like ReLU but allows a small negative number to pass through to avoid problems.</li>
+        <li><strong>Linear</strong><br>Simply passes the number as-is. Used when we want to predict exact numbers.</li>
+        <li><strong>Softmax</strong><br>Transforms numbers into probabilities that sum to 1. Used when choosing between multiple classes.</li>
+      </ul>
+      <p><strong>In our example, we use the Sigmoid function</strong> because it's simple and good for yes/no decisions, like classifying between two categories.</p>
+    </div>
+      
+      
+
+    <div class="control-panel" role="group" aria-label="Pannello di controllo della rete neurale">
+      <button id="start-btn">Start training</button>
+      <button id="next-step-btn" disabled>Next Step</button>
+      <button id="reset-btn">Reset Network</button>
+    </div>
+
+    <section class="network-container" id="network-canvas" aria-live="polite" aria-atomic="true" aria-label="Area di visualizzazione della rete neurale">
+      <div id="full-network-view" class="network-view">
+      </div>
+      <div class="mini-legend-panel">
+        <h4>Index</h4>
+        <ul>
+            <li>
+                <span class="mini-legend-number">0</span>
+                Input Layer
+            </li>
+            <li>
+                <span class="mini-legend-number">1</span>
+                Hidden Layer
+            </li>
+            <li>
+                <span class="mini-legend-number">2</span>
+                Output Layer
+            </li>
+            <li>
+              <span class="mini-legend-dot" style="background-color: var(--forward-flow);"></span>
+              Forward Flow: Phase 1, Active connections during Forward Propagation (activation computation)
+            </li>
+            <li>
+                <span class="mini-legend-dot" style="background-color: var(--backward-flow);"></span>
+                Backward Flow: Phase 2, Active connections during Backpropagation (error computation)
+            </li>
+            <li>
+                <span class="mini-legend-dot" style="background-color: var(--weight-update);"></span>
+                Weight/Bias Update: Phase 4, Connections or neurons whose weights or biases are being updated
+            </li>
+          
+        </ul>
+        </div>
+      <div id="neuron-detail-view" class="neuron-detail" style="display:none;">
+        <p id="phase-explanation" style="text-align:center; font-style: italic;">
+          Vista dettagliata dell'attivazione di un singolo neurone. Clicca "Mostra Panoramica Completa della Rete" per tornare alla panoramica.
+        </p>
+      </div>
+    </section>
+
+    <div class="explanation-panel">
+    <h4 id="explanation-title">Welcome to the Neural Network Visualizer!</h4>
+    <p id="explanation-text">
+        Hi! I’m your guide to understanding how a neural network learns. Imagine taking a microscopic look inside the "brain" of an AI.
+        To start our journey, click the "Start training" button. This will launch a detailed step-by-step visualization of a full training cycle,
+        covering both how the network makes predictions (forward propagation) and how it learns from its mistakes (backpropagation).
+        You can advance step by step to truly grasp each concept.
+      </p>
+  </div>
+
+  <div class="example-panel">
+      <h4 id="example-title">Tutorial: How a Simple Neuron Learns to Decide</h4>
+      <div id="example-content">
+          <p id="example-intro">
+              Imagine a neuron that needs to decide whether to turn on a light (output 1) or keep it off (output 0), based on two inputs:
+          </p>
+          <ul>
+              <li><b>Input 1 (Outside Light Level):</b> Close to 1 when dark, close to 0 when bright.</li>
+              <li><b>Input 2 (Motion Detected):</b> Close to 1 if motion is detected, close to 0 otherwise.</li>
+          </ul>
+          <p>
+              Suppose our network has an input layer, a hidden layer with 3 neurons, and an output layer with 1 neuron.
+              Let's follow how the output neuron makes its decision and learns.
+          </p>
+          <p id="example-scenario">
+              <b>Initial Scenario:</b> It is dark (Input 1 = <span id="example-input1">0.9</span>) and there is motion (Input 2 = <span id="example-input2">0.8</span>).
+              The initial weights and biases of the network are set randomly.
+          </p>
+          <div id="example-steps">
+              <div id="example-step-0" class="example-step active">
+                  <strong>Start Example:</strong>
+                  <p>Click <b>Next Step</b> to see how this simple network processes information, step by step.</p>
+              </div>
+              <div id="example-step-1" class="example-step">
+                  <strong>1. Forward Propagation: Input to Hidden Layer</strong>
+                  <p>The input values are passed to the neurons in the hidden layer. Each hidden neuron calculates its weighted sum (<i>z</i>) and activation (<i>a</i>) (in this case the Sigmoid activation) based on these inputs and its own weights and bias.</p>
+                  <p>Input 1: <span class="highlight" id="step1-input1"></span></p>
+                  <p>Input 2: <span class="highlight" id="step1-input2"></span></p>
+                  <p><b>Hidden Neuron 1:</b></p>
+                  <p><i>z_H1</i> = (Input 1 × Weight I1,H1) + (Input 2 × Weight I2,H1) + Bias H1 = (<span class="highlight" id="step1-i1-h1"></span> × <span class="highlight" id="step1-w1-h1"></span>) + (<span class="highlight" id="step1-i2-h1"></span> × <span class="highlight" id="step1-w2-h1"></span>) + (<span class="highlight" id="step1-b-h1"></span>) = <span class="highlight" id="step1-z-h1"></span></p>
+                  <p><i>a_H1</i> = Sigmoid(<i>z_H1</i>) = <span class="highlight" id="step1-a-h1"></span></p>
+                  <p><b>Hidden Neuron 2:</b></p>
+                  <p><i>z_H2</i> = (Input 1 × Weight I1,H2) + (Input 2 × Weight I2,H2) + Bias H2 = (<span class="highlight" id="step1-i1-h2"></span> × <span class="highlight" id="step1-w1-h2"></span>) + (<span class="highlight" id="step1-i2-h2"></span> × <span class="highlight" id="step1-w2-h2"></span>) + (<span class="highlight" id="step1-b-h2"></span>) = <span class="highlight" id="step1-z-h2"></span></p>
+                  <p><i>a_H2</i> = Sigmoid(<i>z_H2</i>) = <span class="highlight" id="step1-a-h2"></span></p>
+                  <p><b>Hidden Neuron 3:</b></p>
+                  <p><i>z_H3</i> = (Input 1 × Weight I1,H3) + (Input 2 × Weight I2,H3) + Bias H3 = (<span class="highlight" id="step1-i1-h3"></span> × <span class="highlight" id="step1-w1-h3"></span>) + (<span class="highlight" id="step1-i2-h3"></span> × <span class="highlight" id="step1-w2-h3"></span>) + (<span class="highlight" id="step1-b-h3"></span>) = <span class="highlight" id="step1-z-h3"></span></p>
+                  <p><i>a_H3</i> = Sigmoid(<i>z_H3</i>) = <span class="highlight" id="step1-a-h3"></span></p>
+              </div>
+              <div id="example-step-2" class="example-step">
+                  <strong>2. Forward Propagation: Hidden to Output Layer</strong>
+                  <p>The activations from the hidden layer (<i>a_H1</i>, <i>a_H2</i>, <i>a_H3</i>) now become the inputs for the output neuron. The output neuron calculates its weighted sum (<i>z</i>) and final activation (<i>a</i>).</p>
+                  <p><i>a_H1</i>: <span class="highlight" id="step2-a-h1"></span></p>
+                  <p><i>a_H2</i>: <span class="highlight" id="step2-a-h2"></span></p>
+                  <p><i>a_H3</i>: <span class="highlight" id="step2-a-h3"></span></p>
+                  <p><b>Output Neuron:</b></p>
+                  <p><i>z_Out</i> = (a_H1 × Weight H1,Out) + (a_H2 × Weight H2,Out) + (a_H3 × Weight H3,Out) + Bias Out</p>
+                  <p><i>z_Out</i> = (<span class="highlight" id="step2-a1-o"></span> × <span class="highlight" id="step2-w1-o"></span>) + (<span class="highlight" id="step2-a2-o"></span> × <span class="highlight" id="step2-w2-o"></span>) + (<span class="highlight" id="step2-a3-o"></span> × <span class="highlight" id="step2-w3-o"></span>) + (<span class="highlight" id="step2-b-o"></span>) = <span class="highlight" id="step2-z-o"></span></p>
+                  <p><i>a_Out</i> = Sigmoid(<i>z_Out</i>) = <span class="highlight" id="step2-a-o"></span></p>
+              </div>
+              <div id="example-step-3" class="example-step">
+                  <strong>3. Loss Calculation (Error)</strong>
+                  <p>We compare the network’s final output (<i>a_Out</i>) with the desired target value. The Mean Squared Error (MSE) loss function quantifies how "wrong" the prediction is.</p>
+                  <p>Formula: Error = (Target - Activation) squared</p>
+                  <p>Calculation: Error = (<span class="highlight" id="step3-target"></span> - <span class="highlight" id="step3-a-o"></span>) squared = <span class="highlight" id="step3-error"></span></p>
+              </div>
+              <div id="example-step-4" class="example-step">
+                  <strong>4. Backpropagation: Calculating Output Layer Error Gradient (Delta)</strong>
+                  <p>To correct the network, we calculate the error gradient (Delta) for the output neuron. This tells us how much the error changes with respect to the net input (<i>z</i>) of the output neuron, considering the derivative of its activation function.</p>
+                  <p>Formula: Delta_Out = (Target - a_Out) × f prime(z_Out), where f prime is the sigmoid derivative</p>
+                  <p>Since f prime(z) = a × (1 - a), we get:</p>
+                  <p>Delta_Out = (<span class="highlight" id="step4-target"></span> - <span class="highlight" id="step4-a-o"></span>) × (<span class="highlight" id="step4-a-o-formula-part1"></span> × (1 - <span class="highlight" id="step4-a-o-formula-part2"></span>)) = <span class="highlight" id="step4-delta-o"></span></p>
+              </div>
+              <div id="example-step-5" class="example-step">
+                  <strong>5. Backpropagation: Calculating Hidden Layer Error Gradients (Delta)</strong>
+                  <p>Now, we propagate the error backward to the hidden layer. The error gradient (Delta) of each hidden neuron depends on its contribution to the output error, weighted by its connections to the output neuron, and the derivative of its own activation function.</p>
+                  <p>Formula: Delta_Hj = (sum over k of Delta_k × W_Hj,k) × f prime(z_Hj)</p>
+                  <p><b>Hidden Neuron 1:</b></p>
+                  <p>Delta_H1 = (Delta_Out × Weight H1 to Out) × f prime(z_H1) = (<span class="highlight" id="step5-delta-o"></span> × <span class="highlight" id="step5-w-h1-o"></span>) × (<span class="highlight" id="step5-a-h1-formula-part1"></span> × (1 - <span class="highlight" id="step5-a-h1-formula-part2"></span>)) = <span class="highlight" id="step5-delta-h1"></span></p>
+                  <p><b>Hidden Neuron 2:</b></p>
+                  <p>Delta_H2 = (Delta_Out × Weight H2 to Out) × f prime(z_H2) = (<span class="highlight" id="step5-delta-o2"></span> × <span class="highlight" id="step5-w-h2-o"></span>) × (<span class="highlight" id="step5-a-h2-formula-part1"></span> × (1 - <span class="highlight" id="step5-a-h2-formula-part2"></span>)) = <span class="highlight" id="step5-delta-h2"></span></p>
+                  <p><b>Hidden Neuron 3:</b></p>
+                  <p>Delta_H3 = (Delta_Out × Weight H3 to Out) × f prime(z_H3) = (<span class="highlight" id="step5-delta-o3"></span> × <span class="highlight" id="step5-w-h3-o"></span>) × (<span class="highlight" id="step5-a-h3-formula-part1"></span> × (1 - <span class="highlight" id="step5-a-h3-formula-part2"></span>)) = <span class="highlight" id="step5-delta-h3"></span></p>
+              </div>
+              <div id="example-step-6" class="example-step">
+                  <strong>6. Backpropagation: Calculating Gradients for Weights and Biases</strong>
+                  <p>Now we calculate specific gradients for each weight and bias. These indicate the direction and magnitude of adjustment needed to reduce the error.</p>
+                  <p>Weight gradient formula: partial derivative of Loss over w_ij = a_i × Delta_j</p>
+                  <p>Bias gradient formula: partial derivative of Loss over b_j = Delta_j</p>
+                  <p><b>Output Layer Gradients:</b></p>
+                  <p>Gradient w_H1,Out = a_H1 × Delta_Out = <span class="highlight" id="step6-a-h1-o"></span> × <span class="highlight" id="step6-delta-o"></span> = <span class="highlight" id="step6-grad-w-h1-o"></span></p>
+                  <p>Gradient w_H2,Out = a_H2 × Delta_Out = <span class="highlight" id="step6-a-h2-o"></span> × <span class="highlight" id="step6-delta-o2"></span> = <span class="highlight" id="step6-grad-w-h2-o"></span></p>
+                  <p>Gradient w_H3,Out = a_H3 × Delta_Out = <span class="highlight" id="step6-a-h3-o"></span> × <span class="highlight" id="step6-delta-o3"></span> = <span class="highlight" id="step6-grad-w-h3-o"></span></p>
+                  <p>Gradient b_Out = Delta_Out = <span class="highlight" id="step6-grad-b-o"></span></p>
+                  <p><b>Hidden Layer Gradients:</b></p>
+                  <p>Gradient w_I1,H1 = Input 1 × Delta_H1 = <span class="highlight" id="step6-i1-h1"></span> × <span class="highlight" id="step6-delta-h1"></span> = <span class="highlight" id="step6-grad-w-i1-h1"></span></p>
+                  <p>Gradient w_I2,H1 = Input 2 × Delta_H1 = <span class="highlight" id="step6-i2-h1"></span> × <span class="highlight" id="step6-delta-h1-2"></span> = <span class="highlight" id="step6-grad-w-i2-h1"></span></p>
+                  <p>Gradient b_H1 = Delta_H1 = <span class="highlight" id="step6-grad-b-h1"></span></p>
+                  <p>(Similar calculations for Hidden Neurons 2 and 3)</p>
+              </div>
+              <div id="example-step-7" class="example-step">
+                  <strong>7. Updating Weights and Biases</strong>
+                  <p>Finally, we update the network’s weights and biases using the calculated gradients and the learning rate (eta). This is the core of learning, where the network adjusts to make better predictions.</p>
+                  <p>Learning Rate (eta): <span id="example-lr">0.1</span></p>
+                  <p>Formula: New Parameter = Old Parameter - eta × Gradient</p>
+                  <p><b>Output Layer Updates:</b></p>
+                  <p>w_H1,Out,new = <span class="highlight" id="step7-w-h1-o-old"></span> - <span class="highlight" id="step7-lr-1"></span> × <span class="highlight" id="step7-grad-w-h1-o"></span> = <span class="highlight" id="step7-w-h1-o-new"></span></p>
+                  <p>w_H2,Out,new = <span class="highlight" id="step7-w-h2-o-old"></span> - <span class="highlight" id="step7-lr-2"></span> × <span class="highlight" id="step7-grad-w-h2-o"></span> = <span class="highlight" id="step7-w-h2-o-new"></span></p>
+                  <p>w_H3,Out,new = <span class="highlight" id="step7-w-h3-o-old"></span> - <span class="highlight" id="step7-lr-3"></span> × <span class="highlight" id="step7-grad-w-h3-o"></span> = <span class="highlight" id="step7-w-h3-o-new"></span></p>
+                  <p>b_Out,new = <span class="highlight" id="step7-b-o-old"></span> - <span class="highlight" id="step7-lr-4"></span> × <span class="highlight" id="step7-grad-b-o"></span> = <span class="highlight" id="step7-b-o-new"></span></p>
+                  <p><b>Hidden Layer Updates (Example for Hidden Neuron 1):</b></p>
+                  <p>w_I1,H1,new = <span class="highlight" id="step7-w-i1-h1-old"></span> - <span class="highlight" id="step7-lr-5"></span> × <span class="highlight" id="step7-grad-w-i1-h1"></span> = <span class="highlight" id="step7-w-i1-h1-new"></span></p>
+                  <p>w_I2,H1,new = <span class="highlight" id="step7-w-i2-h1-old"></span> - <span class="highlight" id="step7-lr-6"></span> × <span class="highlight" id="step7-grad-w-i2-h1"></span> = <span class="highlight" id="step7-w-i2-h1-new"></span></p>
+                  <p>b_H1,new = <span class="highlight" id="step7-b-h1-old"></span> - <span class="highlight" id="step7-lr-7"></span> × <span class="highlight" id="step7-grad-b-h1"></span> = <span class="highlight" id="step7-b-h1-new"></span></p>
+                  <p>(Similar updates for Hidden Neurons 2 and 3)</p>
+              </div>
+              <div id="example-step-8" class="example-step">
+                  <strong>Epoch Conclusion:</strong>
+                  <p><em>This process of forward pass, loss calculation, and backpropagation forms the core of how neural networks learn from examples.</em> By repeating this many times with different examples, the network learns to make more accurate predictions.</p>
+                  <p>The new values for this example (after this epoch) are:</p>
+                  <ul>
+                      <li><b>Output Neuron Bias:</b> <span id="final-b-o"></span></li>
+                      <li><b>Weight H1 to Output:</b> <span id="final-w-h1-o"></span></li>
+                      <li><b>Weight H2 to Output:</b> <span id="final-w-h2-o"></span></li>
+                      <li><b>Weight H3 to Output:</b> <span id="final-w-h3-o"></span></li>
+                      <li><b>Hidden Neuron 1 Bias:</b> <span id="final-b-h1"></span></li>
+                      <li><b>Input 1 to H1 Weight:</b> <span id="final-w-i1-h1"></span></li>
+                      <li><b>Input 2 to H1 Weight:</b> <span id="final-w-i2-h1"></span></li>
+                  </ul>
+                  <p>Click "Reset Network" to start again with new random weights, or "Start training" to see another epoch with the <i>updated</i> weights!</p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+    <form action="https://formsubmit.co/leonardo.cofone5@gmail.com" method="POST" aria-label="Modulo di contatto">
+        <label for="email">Email:</label><br />
+        <input type="email" id="email" name="email" placeholder="Your.email@example.com" required aria-required="true" /><br />
+
+        <label for="subject">Subject:</label><br />
+        <input type="text" id="subject" name="subject" placeholder="Subject" required aria-required="true" /><br />
+
+        <label for="message">Message:</label><br />
+        <textarea id="message" name="message" rows="5" placeholder="Question or something to report? Write your message here..." required aria-required="true"></textarea><br />
+
+        <button type="submit">Send</button>
+
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_cc" value="leonardo.cofone5@gmail.com" />
+        <input type="hidden" name="_subject" value="Nuovo messaggio dal sito Guarda_rete" />
+      </form>
+
+  </div>
+
+  <div class="social-links" role="navigation" aria-label="Link ai social media">
+    <a href="https://github.com/LeonardoCofone" target="_blank" rel="noopener" class="highlight" aria-label="Profilo GitHub">GitHub</a>
+    <a href="https://www.kaggle.com/zlatan599" target="_blank" rel="noopener" class="highlight" aria-label="Profilo Kaggle">Kaggle</a>
+    <a href="https://www.linkedin.com/in/leonardo-cofone-914228361/" target="_blank" rel="noopener" class="highlight" aria-label="Profilo Linkedin">Linkedin</a>
+  </div>
+
+  <footer>
+    <p>Neural Network Visualizer &copy; 2025, Entirely developed by Leonardo Cofone</p>
+  </footer>
+</div>
+
+<div class="tooltip" id="neuron-tooltip" role="tooltip" aria-hidden="true"></div>
+<script type="module" src="script.js"></script>
+
+</body>
+</html>
