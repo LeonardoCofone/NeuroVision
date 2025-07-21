@@ -38,4 +38,4 @@ This project is licensed under the MIT License.
 Created by Leonardo Cofone  
 [https://leonardocofone.github.io/NeuroVision/](https://leonardocofone.github.io/NeuroVision/)
 
-Thank You!!
+Thank You!
