@@ -1,4 +1,4 @@
-# NeuroVision: Neural Network Visualizer
+g# NeuroVision: Neural Network Visualizer
 
 NeuroVision is an interactive web-based visualization tool that shows you exactly how a neural network learns, step by step. It is designed to help students, educators, and enthusiasts understand the inner workings of neural networks in an intuitive and engaging way.
 
@@ -38,4 +38,4 @@ This project is licensed under the MIT License.
 Created by Leonardo Cofone  
 [https://leonardocofone.github.io/NeuroVision/](https://leonardocofone.github.io/NeuroVision/)
 
-Thank You!
+Thank You!!!
