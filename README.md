@@ -2,6 +2,7 @@
 
 NeuroVision is an interactive web-based visualization tool that shows you exactly how a neural network learns, step by step. It is designed to help students, educators, and enthusiasts understand the inner workings of neural networks in an intuitive and engaging way.
 
+
 ## Features
 
 - Visualize neurons, layers, and connections in a clean and simple interface
